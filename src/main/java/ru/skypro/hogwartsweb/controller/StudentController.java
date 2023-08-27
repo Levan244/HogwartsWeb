@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.hogwartsweb.model.Faculty;
 import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.service.StudentService;
@@ -57,7 +58,14 @@ public class StudentController {
 
     @PostMapping("age")
     @Operation(summary = "получение студентов по возрасту")
-    public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam Integer age) {
-        return ResponseEntity.ok(service.getByAge(age));
+    public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam Integer startAge,
+                                                                @RequestParam Integer engAge) {
+        return ResponseEntity.ok(service.getByAge(startAge, engAge));
+    }
+
+    @GetMapping("faculty/{studentId}")
+    public ResponseEntity<Faculty> getStudentFuculty(@PathVariable Long studentId) {
+        Faculty faculty = service.get(studentId).getFaculty();
+        return ResponseEntity.ok(faculty);
     }
 }
