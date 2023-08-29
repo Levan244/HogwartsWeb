@@ -53,14 +53,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Collection<Student> getByAge(Integer age) {
+    public Collection<Student> getByAge(Integer startAge,Integer engAge) {
+        checkAge(startAge);
+        checkAge(engAge);
+        return studentRepository.findStudentByAgeBetween(startAge, engAge);
+    }
+
+    private void checkAge(Integer age) {
         if (age <= 10 || age >= 100) {
             throw new IncorrectException("Требуеться указать корректный возраст");
         }
-
-        return studentRepository.findAll().stream()
-                .filter(s->s.getAge().equals(age))
-                .collect(Collectors.toList());
     }
 
 }
