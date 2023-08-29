@@ -5,10 +5,13 @@ import org.springframework.util.StringUtils;
 import ru.skypro.hogwartsweb.exception.IncorrectException;
 import ru.skypro.hogwartsweb.exception.NotFoundException;
 import ru.skypro.hogwartsweb.model.Faculty;
+import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.repository.FacultyRepository;
+import ru.skypro.hogwartsweb.repository.StudentRepository;
 import ru.skypro.hogwartsweb.service.FacultyService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
