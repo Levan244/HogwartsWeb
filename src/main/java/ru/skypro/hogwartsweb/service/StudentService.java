@@ -15,5 +15,5 @@ public interface StudentService {
 
     Collection<Student> getAll();
 
-    Collection<Student> getByAge(Integer age);
+    Collection<Student> getByAge(Integer startAge,Integer engAge);
 }
