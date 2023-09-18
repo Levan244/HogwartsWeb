@@ -19,6 +19,7 @@ public class Student {
         this.faculty = faculty;
     }
 
+
     public Faculty getFaculty() {
         return faculty;
     }

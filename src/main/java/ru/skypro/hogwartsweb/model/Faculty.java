@@ -1,7 +1,7 @@
 package ru.skypro.hogwartsweb.model;
 
 import jakarta.persistence.*;
-import org.openjdk.jmh.annotations.Group;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +23,7 @@ public class Faculty {
         this.name = name;
         this.color = color;
     }
+
 
     public Faculty(List<Student> students) {
         this.students = students;
