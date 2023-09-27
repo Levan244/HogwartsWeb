@@ -1,11 +1,9 @@
 package ru.skypro.hogwartsweb.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.openjdk.jmh.annotations.Group;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "faculties")
@@ -16,11 +14,26 @@ public class Faculty {
     private  Long id;
     private String name;
     private String color;
+    @OneToMany(mappedBy = "faculty")
+    private List<Student> students;
+
 
     public Faculty(Long id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
+    }
+
+    public Faculty(List<Student> students) {
+        this.students = students;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     public Faculty() {
