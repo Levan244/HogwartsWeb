@@ -49,6 +49,13 @@ public class StudentController {
         Student student = service.remove(id);
         return ResponseEntity.ok(student);
     }
+    @GetMapping("{id}")
+    @Operation(summary = "Получение студента")
+    public ResponseEntity<Student> get(@PathVariable Long id) {
+        Student foundStudent = service.get(id);
+        return ResponseEntity.ok(foundStudent);
+    }
+
 
     @PostMapping("all")
     @Operation(summary = "Получение всех студентов")
@@ -63,9 +70,25 @@ public class StudentController {
         return ResponseEntity.ok(service.getByAge(startAge, engAge));
     }
 
+
     @GetMapping("faculty/{studentId}")
     public ResponseEntity<Faculty> getStudentFuculty(@PathVariable Long studentId) {
         Faculty faculty = service.get(studentId).getFaculty();
         return ResponseEntity.ok(faculty);
+    }
+    @GetMapping("could")
+    @Operation(summary = "Получение количество студентов")
+    public ResponseEntity<Integer> getCount() {
+        return ResponseEntity.ok(service.getCount());
+    }
+    @GetMapping("age/average")
+    @Operation(summary = "Получение среднего возраста студентов")
+    public ResponseEntity<Float> getAverageAge() {
+        return ResponseEntity.ok(service.getAverageAge());
+    }
+    @GetMapping("last")
+    @Operation(summary = "Получение  5-ти последних студента")
+    public ResponseEntity<Collection> getLastFive() {
+        return ResponseEntity.ok(service.getLastFive());
     }
 }
