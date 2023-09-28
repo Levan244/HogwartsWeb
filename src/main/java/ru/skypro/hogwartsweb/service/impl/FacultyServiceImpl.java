@@ -5,10 +5,13 @@ import org.springframework.util.StringUtils;
 import ru.skypro.hogwartsweb.exception.IncorrectException;
 import ru.skypro.hogwartsweb.exception.NotFoundException;
 import ru.skypro.hogwartsweb.model.Faculty;
+import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.repository.FacultyRepository;
+import ru.skypro.hogwartsweb.repository.StudentRepository;
 import ru.skypro.hogwartsweb.service.FacultyService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,13 +56,11 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public Collection<Faculty> getByColor(String color) {
-        if (!StringUtils.hasText(color)) {
-            throw new IncorrectException("Требуеться указать корректный цвет для поиска");
+    public Collection<Faculty> getByColorOrNAme(String color,String name) {
+        if (!StringUtils.hasText(color) && !StringUtils.hasText(name)) {
+            throw new IncorrectException("Требуеться указать корректный цвет или имя для поиска");
         }
 
-            return facultyRepository.findAll().stream()
-                    .filter(f -> f.getColor().equals(color))
-                    .collect(Collectors.toList());
-        }
+        return facultyRepository.findFacultiesByNameIgnoreCaseOrColorIgnoreCase(color, name);
+    }
 }

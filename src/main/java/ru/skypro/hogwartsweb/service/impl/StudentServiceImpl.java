@@ -1,5 +1,7 @@
 package ru.skypro.hogwartsweb.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.hogwartsweb.exception.IncorrectException;
 import ru.skypro.hogwartsweb.exception.NotFoundException;
@@ -8,12 +10,14 @@ import ru.skypro.hogwartsweb.repository.StudentRepository;
 import ru.skypro.hogwartsweb.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -21,11 +25,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student add(Student student) {
+        logger.info("Was invoker method add for students");
         return studentRepository.save(student);
     }
 
     @Override
     public Student remove(Long id) {
+        logger.info("Was invoker method remove for students");
+
         Student student = get(id);
         studentRepository.deleteById(id);
         return student;
@@ -33,34 +40,63 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student update(Student student) {
+        logger.info("Was invoker method update for students");
         return studentRepository.save(student);
 
     }
 
     @Override
     public Student get(Long id) {
+        logger.info("Was invoker method get for students");
         Optional<Student> student = studentRepository.findById(id);
         if (student.isPresent()) {
             return student.get();
         }else {
+            logger.error("Student not Found, id = " + id);
             throw new NotFoundException("Студент с " + id + " не существует");
         }
     }
 
     @Override
     public Collection<Student> getAll() {
+        logger.info("Was invoker method getAll for students");
         return studentRepository.findAll();
     }
 
     @Override
-    public Collection<Student> getByAge(Integer age) {
-        if (age <= 10 || age >= 100) {
-            throw new IncorrectException("Требуеться указать корректный возраст");
-        }
+    public Collection<Student> getByAge(Integer startAge,Integer engAge) {
+        logger.info("Was invoker method getByAge for students");
 
-        return studentRepository.findAll().stream()
-                .filter(s->s.getAge().equals(age))
-                .collect(Collectors.toList());
+        checkAge(startAge);
+        checkAge(engAge);
+        return studentRepository.findStudentByAgeBetween(startAge, engAge);
+    }
+
+    @Override
+    public Integer getCount() {
+        logger.info("Was invoker method getCount for students");
+        return studentRepository.getCount();
+    }
+
+    @Override
+    public Float getAverageAge() {
+        logger.info("Was invoker method grtAverageAge for students");
+        return studentRepository.getAverageAge();
+    }
+
+    @Override
+    public List<Student> getLastFive() {
+        logger.info("Was invoker method getLastFive for students");
+        return studentRepository.getLastFive();
+    }
+
+    private void checkAge(Integer age) {
+        logger.info("Was invoker method checkAge for students");
+        if (age <= 10 || age >= 100) {
+            logger.warn("Incorrect student age " + age);
+            throw new IncorrectException("Требуеться указать корректный возраст");
+
+        }
     }
 
 }
