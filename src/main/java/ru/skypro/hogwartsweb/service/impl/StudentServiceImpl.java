@@ -8,6 +8,7 @@ import ru.skypro.hogwartsweb.repository.StudentRepository;
 import ru.skypro.hogwartsweb.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,14 +54,31 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Collection<Student> getByAge(Integer age) {
+    public Collection<Student> getByAge(Integer startAge,Integer engAge) {
+        checkAge(startAge);
+        checkAge(engAge);
+        return studentRepository.findStudentByAgeBetween(startAge, engAge);
+    }
+
+    @Override
+    public Integer getCount() {
+        return studentRepository.getCount();
+    }
+
+    @Override
+    public Float getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
+    @Override
+    public List<Student> getLastFive() {
+        return studentRepository.getLastFive();
+    }
+
+    private void checkAge(Integer age) {
         if (age <= 10 || age >= 100) {
             throw new IncorrectException("Требуеться указать корректный возраст");
         }
-
-        return studentRepository.findAll().stream()
-                .filter(s->s.getAge().equals(age))
-                .collect(Collectors.toList());
     }
 
 }
