@@ -108,6 +108,50 @@ public class StudentServiceImpl implements StudentService {
                 .orElse(0.0f);
     }
 
+    @Override
+    public void printStudents() {
+        List<Student> students = studentRepository.findAll();
+
+        if (students.size() >= 6) {
+            students.subList(0,2).forEach(this::printStudentName);
+
+            printStudents(students.subList(2,4));
+            printStudents(students.subList(4,6));
+        }
+    }
+
+    @Override
+    public void printStudentsSync() {
+        List<Student> students = studentRepository.findAll();
+
+        if (students.size() >= 6) {
+            students.subList(0,2).forEach(this::printStudentNameSync);
+
+            printStudentsSync(students.subList(2,4));
+            printStudentsSync(students.subList(4,6));
+        }
+
+    }
+
+    private void printStudentName(Student student) {
+        logger.info("Student: "+student.getId()+""+student.getName());
+    }
+    private synchronized void printStudentNameSync(Student student) {
+        logger.info("Student: "+student.getId()+""+student.getName());
+    }
+
+
+    private void printStudents(List<Student> students) {
+        new Thread(()->{
+            students.forEach(this::printStudentName);
+        }).start();
+    }
+    private void printStudentsSync(List<Student> students) {
+        new Thread(()->{
+            students.forEach(this::printStudentNameSync);
+        }).start();
+    }
+
     private void checkAge(Integer age) {
         logger.info("Was invoker method checkAge for students");
         if (age <= 10 || age >= 100) {

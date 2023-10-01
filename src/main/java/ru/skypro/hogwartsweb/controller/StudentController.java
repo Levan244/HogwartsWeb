@@ -101,4 +101,17 @@ public class StudentController {
     public ResponseEntity<Double> getAverageAgeByStream() {
         return ResponseEntity.ok(service.getAverageAgeByStream());
     }
+
+    @GetMapping("print-names")
+    @Operation(summary = "Вывод в лог информации о студентах в разных потоках")
+    public ResponseEntity<Void> printStudentsNames() {
+        service.printStudents();
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("print-names-sync")
+    @Operation(summary = "Вывод в лог информации о студентах в разных потоках с синхронизацией")
+    public ResponseEntity<Void> printStudentsNamesSync() {
+        service.printStudentsSync();
+        return ResponseEntity.ok().build();
+    }
 }

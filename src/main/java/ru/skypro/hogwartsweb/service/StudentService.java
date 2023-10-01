@@ -29,6 +29,9 @@ public interface StudentService {
 
     Double getAverageAgeByStream();
 
+    void printStudents();
+
+    void printStudentsSync();
 
 
 }
