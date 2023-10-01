@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.hogwartsweb.model.Faculty;
+import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.service.FacultyService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("faculty")
@@ -53,10 +55,25 @@ public class FacultyController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    @PostMapping("collor")
-    @Operation(summary = "получение факультетов по цвету")
-    public ResponseEntity<Collection<Faculty>> getFacultiesByColor(@RequestParam String color) {
-        return ResponseEntity.ok(service.getByColor(color));
+    @PostMapping("collorOrName")
+    @Operation(summary = "получение факультетов по цвету или имени")
+    public ResponseEntity<Collection<Faculty>> getFacultiesByColorOrName(@RequestParam String color,
+                                                                         @RequestParam String name) {
+        return ResponseEntity.ok(service.getByColorOrNAme(color,name));
     }
+
+    @PostMapping("students/{fucultyId}")
+    @Operation(summary = "Получение студентов факультетов")
+    public ResponseEntity<Collection<Student>> getFacultyStudents(@PathVariable Long fucultyId) {
+        List<Student> students = service.get(fucultyId).getStudents();
+        return ResponseEntity.ok(students);
+    }
+
+    @PostMapping("longest-name")
+    @Operation(summary = "Получение самого длинного имении факультета")
+    public ResponseEntity<String> getLongestFacultyName() {
+        return ResponseEntity.ok(service.getLongestFacultyName());
+    }
+
 }
 
