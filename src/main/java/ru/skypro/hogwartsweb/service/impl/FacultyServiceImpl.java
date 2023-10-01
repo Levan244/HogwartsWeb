@@ -14,6 +14,7 @@ import ru.skypro.hogwartsweb.service.FacultyService;
 import ru.skypro.hogwartsweb.service.StudentService;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,4 +77,14 @@ public class FacultyServiceImpl implements FacultyService {
 
         return facultyRepository.findFacultiesByNameIgnoreCaseOrColorIgnoreCase(color, name);
     }
+
+    @Override
+    public String getLongestFacultyName() {
+        logger.info("Was invoker method getLongestFacultyName for faculties");
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
+
 }

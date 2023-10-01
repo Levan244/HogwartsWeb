@@ -1,8 +1,6 @@
 package ru.skypro.hogwartsweb.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.hogwartsweb.service.InfoService;
 
 @RestController
@@ -17,6 +15,10 @@ public class InfoController {
     @GetMapping("/getPort")
     public String getPort() {
         return infoService.getPost();
+    }
 
+    @GetMapping("/calculate")
+    public void calculate(@RequestParam Integer limit) {
+        infoService.calculateBySteam(limit);
     }
 }

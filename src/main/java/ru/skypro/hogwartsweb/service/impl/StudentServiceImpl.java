@@ -90,6 +90,24 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.getLastFive();
     }
 
+    @Override
+    public List<String> getNamesByA() {
+        logger.info("Was invoker method getNamesByA for students");
+        return studentRepository.findAll().stream()
+                .filter(s -> s.getName().startsWith("A"))
+                .map(n -> n.getName())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Double getAverageAgeByStream() {
+        logger.info("Was invoker method getAverageAgeByStream for students");
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0f);
+    }
+
     private void checkAge(Integer age) {
         logger.info("Was invoker method checkAge for students");
         if (age <= 10 || age >= 100) {
