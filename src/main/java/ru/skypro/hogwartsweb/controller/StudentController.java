@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.hogwartsweb.model.Faculty;
 import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.model.Student;
 import ru.skypro.hogwartsweb.service.StudentService;
@@ -48,6 +49,13 @@ public class StudentController {
         Student student = service.remove(id);
         return ResponseEntity.ok(student);
     }
+    @GetMapping("{id}")
+    @Operation(summary = "Получение студента")
+    public ResponseEntity<Student> get(@PathVariable Long id) {
+        Student foundStudent = service.get(id);
+        return ResponseEntity.ok(foundStudent);
+    }
+
 
     @PostMapping("all")
     @Operation(summary = "Получение всех студентов")
@@ -57,7 +65,53 @@ public class StudentController {
 
     @PostMapping("age")
     @Operation(summary = "получение студентов по возрасту")
-    public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam Integer age) {
-        return ResponseEntity.ok(service.getByAge(age));
+    public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam Integer startAge,
+                                                                @RequestParam Integer engAge) {
+        return ResponseEntity.ok(service.getByAge(startAge, engAge));
+    }
+
+
+    @GetMapping("faculty/{studentId}")
+    public ResponseEntity<Faculty> getStudentFuculty(@PathVariable Long studentId) {
+        Faculty faculty = service.get(studentId).getFaculty();
+        return ResponseEntity.ok(faculty);
+    }
+    @GetMapping("could")
+    @Operation(summary = "Получение количество студентов")
+    public ResponseEntity<Integer> getCount() {
+        return ResponseEntity.ok(service.getCount());
+    }
+    @GetMapping("age/average")
+    @Operation(summary = "Получение среднего возраста студентов")
+    public ResponseEntity<Float> getAverageAge() {
+        return ResponseEntity.ok(service.getAverageAge());
+    }
+    @GetMapping("last")
+    @Operation(summary = "Получение  5-ти последних студента")
+    public ResponseEntity<Collection<Student>> getLastFive() {
+        return ResponseEntity.ok(service.getLastFive());
+    }
+    @GetMapping("name-by-a")
+    @Operation(summary = "Получение имен на букву а ")
+    public ResponseEntity<Collection<String>> getNamesByA() {
+        return ResponseEntity.ok(service.getNamesByA());
+    }
+    @GetMapping("age/average-stream")
+    @Operation(summary = "Получение среднего возраста студентов(stream)")
+    public ResponseEntity<Double> getAverageAgeByStream() {
+        return ResponseEntity.ok(service.getAverageAgeByStream());
+    }
+
+    @GetMapping("print-names")
+    @Operation(summary = "Вывод в лог информации о студентах в разных потоках")
+    public ResponseEntity<Void> printStudentsNames() {
+        service.printStudents();
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("print-names-sync")
+    @Operation(summary = "Вывод в лог информации о студентах в разных потоках с синхронизацией")
+    public ResponseEntity<Void> printStudentsNamesSync() {
+        service.printStudentsSync();
+        return ResponseEntity.ok().build();
     }
 }
